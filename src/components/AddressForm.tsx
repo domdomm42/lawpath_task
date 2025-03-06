@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { gql, useLazyQuery } from "@apollo/client";
 import FormInput from "./FormInput";
 import StatusMessage from "./StatusMessage";
 
@@ -17,6 +18,15 @@ interface FormStatus {
   message: string;
 }
 
+const VALIDATE_ADDRESS = gql`
+  query ValidateAddress($postcode: String!, $suburb: String!, $state: String!) {
+    validateAddress(postcode: $postcode, suburb: $suburb, state: $state) {
+      isValid
+      message
+    }
+  }
+`;
+
 function AddressForm() {
   const [formData, setFormData] = useState<FormData>({
     postcode: "",
@@ -30,6 +40,30 @@ function AddressForm() {
     isError: false,
     message: "",
   });
+
+  const [validateAddress, { loading, error, data }] = useLazyQuery(
+    VALIDATE_ADDRESS,
+    {
+      onCompleted: (data) => {
+        setStatus({
+          isSubmitting: false,
+          isSuccess: data.validateAddress.isValid,
+          isError: !data.validateAddress.isValid,
+          message: data.validateAddress.message,
+        });
+      },
+      onError: (error) => {
+        console.error("GraphQL error:", error);
+        setStatus({
+          isSubmitting: false,
+          isSuccess: false,
+          isError: true,
+          message:
+            "An error occurred while validating the address. Please try again.",
+        });
+      },
+    }
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -64,24 +98,14 @@ function AddressForm() {
       return;
     }
 
-    // Simulate form submission for now
-    // TODO: Replace with actual API call
-    setStatus({
-      isSubmitting: true,
-      isSuccess: false,
-      isError: false,
-      message: "",
+    // Execute the GraphQL query with all three parameters
+    validateAddress({
+      variables: {
+        postcode: formData.postcode,
+        suburb: formData.suburb,
+        state: formData.state,
+      },
     });
-
-    // Demo testing
-    // setTimeout(() => {
-    //   setStatus({
-    //     isSubmitting: false,
-    //     isSuccess: true,
-    //     isError: false,
-    //     message: "The postcode, suburb, and state input are valid.",
-    //   });
-    // }, 1000);
   };
 
   return (
