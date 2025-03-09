@@ -1,6 +1,6 @@
-import { AddressInput, ValidationResult } from "./types";
+import { AddressInput, LocalitiesResponse, ValidationResult } from "./types";
 import { createAPIClient } from "./api";
-import { normalizeLocalities } from "./utils";
+import { normalizeLocalities, isSuburbValid } from "./utils";
 
 // Main business logic
 export const createAddressValidator = (baseUrl: string, authToken: string) => {
@@ -10,7 +10,7 @@ export const createAddressValidator = (baseUrl: string, authToken: string) => {
   return async (address: AddressInput): Promise<ValidationResult> => {
     try {
       // Get locality data based on suburb and state
-      const data = await apiClient.fetchLocalities(
+      const data: LocalitiesResponse = await apiClient.fetchLocalities(
         address.suburb,
         address.state
       );
@@ -18,8 +18,9 @@ export const createAddressValidator = (baseUrl: string, authToken: string) => {
       // Normalize locality data to return in array format
       const localities = normalizeLocalities(data);
 
-      // If there is no locality that matches the suburb and the state
-      if (localities.length === 0) {
+      // if suburb name is only partial or if suburb doesn't exist, return appropriate message
+      const isSuburbNameValid = isSuburbValid(address.suburb, localities);
+      if (!isSuburbNameValid || localities.length === 0) {
         return {
           isValid: false,
           message: `The suburb ${address.suburb} does not exist in the state ${address.state}`,
