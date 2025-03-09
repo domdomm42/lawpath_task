@@ -8,7 +8,10 @@ interface FormInputProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   maxLength?: number;
+  minLength?: number;
   type?: string;
+  pattern?: string;
+  required?: boolean;
 }
 
 function FormInput({
@@ -19,7 +22,10 @@ function FormInput({
   onChange,
   placeholder = "",
   maxLength,
+  minLength,
   type = "text",
+  pattern,
+  required,
 }: FormInputProps) {
   return (
     <div>
@@ -35,6 +41,9 @@ function FormInput({
         className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         placeholder={placeholder}
         maxLength={maxLength}
+        minLength={minLength}
+        pattern={pattern}
+        required={required}
       />
     </div>
   );

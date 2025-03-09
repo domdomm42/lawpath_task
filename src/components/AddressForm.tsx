@@ -67,10 +67,20 @@ function AddressForm() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+
+    // For postcode field, only allow numeric input
+    if (name === "postcode") {
+      const numericValue = value.replace(/[^0-9]/g, "");
+      setFormData({
+        ...formData,
+        [name]: numericValue,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
 
     // Clear any previous status messages when user starts typing again
     if (status.isSuccess || status.isError) {
@@ -113,13 +123,17 @@ function AddressForm() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Postcode Field */}
         <FormInput
+          type="text"
           id="postcode"
           name="postcode"
+          pattern="[0-9]{4}"
           label="Postcode"
           value={formData.postcode}
           onChange={handleChange}
           placeholder="e.g. 2000"
           maxLength={4}
+          minLength={4}
+          required={true}
         />
 
         {/* Suburb Field */}

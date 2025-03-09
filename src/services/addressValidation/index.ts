@@ -27,7 +27,7 @@ export const createAddressValidator = (baseUrl: string, authToken: string) => {
         };
       }
 
-      // If there is a locality, check if any locality matches the user's input postcode
+      // If suburb exists within the state, check if its postcode matches the entered postcode
       const matchingPostcode = localities.find(
         (loc) => loc.postcode.toString() === address.postcode
       );
