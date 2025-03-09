@@ -1,6 +1,6 @@
 import { AddressInput, LocalitiesResponse, ValidationResult } from "./types";
 import { createAPIClient } from "./api";
-import { normalizeLocalities, isSuburbValid } from "./utils";
+import { normalizeLocalities, isSuburbValid, getStateLabel } from "./utils";
 
 // Main business logic
 export const createAddressValidator = (baseUrl: string, authToken: string) => {
@@ -23,7 +23,9 @@ export const createAddressValidator = (baseUrl: string, authToken: string) => {
       if (!isSuburbNameValid || localities.length === 0) {
         return {
           isValid: false,
-          message: `The suburb ${address.suburb} does not exist in the state ${address.state}`,
+          message: `The suburb ${
+            address.suburb
+          } does not exist in the state ${getStateLabel(address.state)}`,
         };
       }
 

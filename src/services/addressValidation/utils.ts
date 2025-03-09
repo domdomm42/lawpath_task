@@ -1,4 +1,5 @@
 import { Locality, LocalitiesResponse } from "./types";
+import { AUSTRALIAN_STATES } from "@/lib/constants";
 
 // Normalize data into array structure
 export const normalizeLocalities = (data: LocalitiesResponse): Locality[] => {
@@ -19,5 +20,11 @@ export const isSuburbValid = (
 ): boolean => {
   return normalizedLocalities.some(
     (locality) => locality.location.toLowerCase() === suburbName.toLowerCase()
+  );
+};
+
+export const getStateLabel = (stateCode: string): string => {
+  return (
+    AUSTRALIAN_STATES.find((s) => s.value === stateCode)?.label || stateCode
   );
 };

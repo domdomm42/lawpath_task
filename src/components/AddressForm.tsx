@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 import { gql, useLazyQuery } from "@apollo/client";
-import FormInput from "./FormInput";
+import FormInput from "../components/FormInput";
 import StatusMessage from "./StatusMessage";
+import { AUSTRALIAN_STATES } from "@/lib/constants";
 
 interface FormData {
   postcode: string;
@@ -65,7 +66,9 @@ function AddressForm() {
     }
   );
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
 
     // For postcode field, only allow numeric input
@@ -123,7 +126,6 @@ function AddressForm() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Postcode Field */}
         <FormInput
-          type="text"
           id="postcode"
           name="postcode"
           pattern="[0-9]{4}"
@@ -144,16 +146,19 @@ function AddressForm() {
           value={formData.suburb}
           onChange={handleChange}
           placeholder="e.g. Sydney"
+          required={true}
         />
 
-        {/* State Field */}
+        {/* State Field as Select */}
         <FormInput
+          type="select"
           id="state"
           name="state"
           label="State"
           value={formData.state}
           onChange={handleChange}
-          placeholder="e.g. NSW"
+          required={true}
+          options={AUSTRALIAN_STATES}
         />
 
         {/* Status Messages */}
