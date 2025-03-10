@@ -4,7 +4,11 @@ import { normalizeLocalities, isSuburbValid, getStateLabel } from "./utils";
 
 // Keep the functional approach but accept the DataSource instead of baseUrl/authToken
 export const createAddressValidator = (localitiesAPI: LocalitiesAPI) => {
-  // Return the right isValid and message based on locality data
+  if (!localitiesAPI) {
+    throw new Error("LocalitiesAPI is required");
+  }
+
+  // Return async function that takes in an address and returns validation result
   return async (address: AddressInput): Promise<ValidationResult> => {
     try {
       // Get locality data using DataSource

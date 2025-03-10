@@ -11,6 +11,7 @@ export class LocalitiesAPI extends RESTDataSource {
     request.headers["Authorization"] = `Bearer ${this.authToken}`;
   }
 
+  // Makes REST request to aus post API and return LocalitiesResponse object
   async getLocalities(
     suburb: string,
     state: string

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 
 interface Option {
   value: string;
@@ -9,72 +9,69 @@ interface FormInputProps {
   id: string;
   name: string;
   label: string;
-  value: string;
-  onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => void;
   placeholder?: string;
-  maxLength?: number;
-  minLength?: number;
   type?: string;
-  pattern?: string;
-  required?: boolean;
   options?: Option[];
+  error?: string;
 }
 
-function FormInput({
-  id,
-  name,
-  label,
-  value,
-  onChange,
-  placeholder = "",
-  maxLength,
-  minLength,
-  type = "text",
-  pattern,
-  required,
-  options = [],
-}: FormInputProps) {
-  return (
-    <div>
-      <label htmlFor={id} className="block text-sm font-medium mb-2">
-        {label}
-      </label>
+// Using forwardRef to make it compatible with React Hook Form
+const FormInput = forwardRef<
+  HTMLInputElement | HTMLSelectElement,
+  FormInputProps & React.HTMLAttributes<HTMLInputElement | HTMLSelectElement>
+>(
+  (
+    {
+      id,
+      name,
+      label,
+      placeholder = "",
+      type = "text",
+      options = [],
+      error,
+      ...rest
+    },
+    ref
+  ) => {
+    return (
+      <div>
+        <label htmlFor={id} className="block text-sm font-medium mb-2">
+          {label}
+        </label>
 
-      {type === "select" ? (
-        <select
-          id={id}
-          name={name}
-          value={value}
-          onChange={onChange}
-          className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          required={required}
-        >
-          <option value="">Select a {label.toLowerCase()}</option>
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <input
-          type={type}
-          id={id}
-          name={name}
-          value={value}
-          onChange={onChange}
-          className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          placeholder={placeholder}
-          maxLength={maxLength}
-          minLength={minLength}
-          pattern={pattern}
-          required={required}
-        />
-      )}
-    </div>
-  );
-}
+        {type === "select" ? (
+          <select
+            id={id}
+            name={name}
+            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            ref={ref as React.ForwardedRef<HTMLSelectElement>}
+            {...rest}
+          >
+            <option value="">Select a {label.toLowerCase()}</option>
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <input
+            type={type}
+            id={id}
+            name={name}
+            placeholder={placeholder}
+            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            ref={ref as React.ForwardedRef<HTMLInputElement>}
+            {...rest}
+          />
+        )}
+
+        {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+      </div>
+    );
+  }
+);
+
+FormInput.displayName = "FormInput";
 
 export default FormInput;
