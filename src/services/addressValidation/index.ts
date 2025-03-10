@@ -1,16 +1,16 @@
 import { AddressInput, LocalitiesResponse, ValidationResult } from "./types";
-import { createAPIClient } from "./api";
+import { LocalitiesAPI } from "./api";
 import { normalizeLocalities, isSuburbValid, getStateLabel } from "./utils";
 
-// Main business logic
-export const createAddressValidator = (baseUrl: string, authToken: string) => {
-  const apiClient = createAPIClient(baseUrl, authToken);
-
+// Keep the functional approach but accept the DataSource instead of baseUrl/authToken
+export const createAddressValidator = (localitiesAPI: LocalitiesAPI) => {
   // Return the right isValid and message based on locality data
   return async (address: AddressInput): Promise<ValidationResult> => {
     try {
-      // Get locality data based on suburb and state
-      const data: LocalitiesResponse = await apiClient.fetchLocalities(
+      // Get locality data using DataSource
+
+      console.log(address);
+      const data: LocalitiesResponse = await localitiesAPI.getLocalities(
         address.suburb,
         address.state
       );

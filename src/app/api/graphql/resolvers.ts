@@ -1,16 +1,34 @@
-import { createAddressValidator } from "../../../services/addressValidation";
-import type { AddressInput } from "../../../services/addressValidation/types";
+import { AddressInput } from "@/services/addressValidation/types";
+import { LocalitiesAPI } from "@/services/addressValidation/api";
+import { createAddressValidator } from "@/services/addressValidation";
 
-// Create a resolver client
-export const createResolvers = (baseUrl: string, authToken: string) => {
-  const validateAddress = createAddressValidator(baseUrl, authToken);
-
-  // add more queries here if need be
-  return {
-    // arguments: (postcode: string; suburb: string; state: string;)
-    Query: {
-      validateAddress: async (_: unknown, args: AddressInput) =>
-        validateAddress(args),
-    },
+type Context = {
+  dataSources: {
+    localities: LocalitiesAPI;
   };
+};
+
+export const resolvers = {
+  Query: {
+    validateAddress: async (
+      _: unknown,
+      args: AddressInput,
+
+      { dataSources }: Context
+    ) => {
+      try {
+        const validateAddress = createAddressValidator(dataSources.localities);
+        return await validateAddress(args);
+      } catch (error) {
+        console.error("Error in validateAddress resolver:", error);
+        return {
+          isValid: false,
+          message:
+            error instanceof Error
+              ? `Resolver error: ${error.message}`
+              : "Error validating address. Please try again.",
+        };
+      }
+    },
+  },
 };

@@ -2,33 +2,31 @@ import { ApolloServer } from "@apollo/server";
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { NextRequest } from "next/server";
 import { typeDefs } from "./schema";
-import { createResolvers } from "./resolvers";
+import { resolvers } from "./resolvers";
+import { LocalitiesAPI } from "@/services/addressValidation/api";
 
-const createApolloServer = () => {
-  const baseUrl = process.env.AUSTRALIA_POST_API_URL;
-  const authToken = process.env.AUSTRALIA_POST_API_TOKEN;
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
 
-  if (!baseUrl || !authToken) {
-    throw new Error(
-      "Missing required environment variables for Australia Post API"
-    );
-  }
+const handler = startServerAndCreateNextHandler(server, {
+  context: async () => {
+    const apiUrl = process.env.AUSTRALIA_POST_API_URL;
+    const apiToken = process.env.AUSTRALIA_POST_API_TOKEN;
 
-  return new ApolloServer({
-    typeDefs,
-    resolvers: createResolvers(baseUrl, authToken),
-  });
-};
+    if (!apiUrl || !apiToken) {
+      throw new Error("API credentials not configured");
+    }
 
-const server = createApolloServer();
-const handler = startServerAndCreateNextHandler(server);
+    return {
+      dataSources: {
+        localities: new LocalitiesAPI(apiUrl, apiToken),
+      },
+    };
+  },
+});
 
-export async function GET(request: NextRequest) {
-  return handler(request);
+export async function POST(req: NextRequest) {
+  return handler(req);
 }
-
-export async function POST(request: NextRequest) {
-  return handler(request);
-}
-
-

@@ -1,6 +1,6 @@
 import { ApolloServer } from "@apollo/server";
 import { typeDefs } from "../../../app/api/graphql/schema";
-import { createResolvers } from "../../../app/api/graphql/resolvers";
+import { resolvers } from "../../../app/api/graphql/resolvers";
 import {
   mockValidLocality,
   mockPartialLocality,
@@ -18,12 +18,13 @@ describe("GraphQL Address Validation unit test", () => {
   // SETUP & TEARDOWN
   //-------------------------------------------------------------------------
   beforeEach(async () => {
+
+
+
+    
     server = new ApolloServer({
       typeDefs,
-      resolvers: createResolvers(
-        "https://api.example.com/address",
-        "test-token"
-      ),
+      resolvers: resolvers,
     });
 
     await server.start();

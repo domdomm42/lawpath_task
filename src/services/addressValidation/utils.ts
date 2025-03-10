@@ -1,5 +1,5 @@
 import { Locality, LocalitiesResponse } from "./types";
-import { AUSTRALIAN_STATES } from "@/lib/constants";
+import { AUSTRALIAN_STATES } from "../../lib/constants";
 
 // Normalize data into array structure
 export const normalizeLocalities = (data: LocalitiesResponse): Locality[] => {
