@@ -1,6 +1,6 @@
-import { AddressInput } from "@/services/addressValidation/types";
-import { LocalitiesAPI } from "@/services/addressValidation/api";
-import { createAddressValidator } from "@/services/addressValidation";
+import { AddressInput } from "../../../services/addressValidation/types";
+import { LocalitiesAPI } from "../../../services/addressValidation/api";
+import { createAddressValidator } from "../../../services/addressValidation/index";
 
 type Context = {
   dataSources: {
@@ -13,7 +13,6 @@ export const resolvers = {
     validateAddress: async (
       _: unknown,
       args: AddressInput,
-
       { dataSources }: Context
     ) => {
       try {

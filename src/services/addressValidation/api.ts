@@ -15,14 +15,11 @@ export class LocalitiesAPI extends RESTDataSource {
     suburb: string,
     state: string
   ): Promise<LocalitiesResponse> {
-    return this.get<LocalitiesResponse>(
-      "", // Base path
-      {
-        params: {
-          q: suburb,
-          state: state,
-        },
-      }
-    );
+    return this.get<LocalitiesResponse>("", {
+      params: {
+        q: suburb,
+        state: state,
+      },
+    });
   }
 }

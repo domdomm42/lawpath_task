@@ -1,6 +1,6 @@
 export const VALIDATE_ADDRESS_QUERY = `
-query {
-  validateAddress(postcode: "2000", suburb: "SYDNEY", state: "NSW") {
+query ValidateAddressQuery($postcode: String!, $suburb: String!, $state: String!) {
+  validateAddress(postcode: $postcode, suburb: $suburb, state: $state) {
     isValid
     message
   }
@@ -8,8 +8,8 @@ query {
 `;
 
 export const INVALID_ADDRESS_QUERY = `
-query {
-  validateAddress(postcode: "2007", suburb: "Broadw", state: "NSW") {
+query InvalidAddressQuery($postcode: String!, $suburb: String!, $state: String!) {
+  validateAddress(postcode: $postcode, suburb: $suburb, state: $state) {
     isValid
     message  
   } 
