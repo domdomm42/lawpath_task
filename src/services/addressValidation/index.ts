@@ -19,6 +19,8 @@ export const createAddressValidator = (localitiesAPI: LocalitiesAPI) => {
         address.state
       );
 
+      console.log(data);
+
       // Normalize locality data to return in array format
       const localities = normalizeLocalities(data);
 

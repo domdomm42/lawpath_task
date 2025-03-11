@@ -45,8 +45,12 @@ function AddressForm() {
   });
 
   // Apollo query setup
-  const [validateAddress, { loading, error, data }] =
-    useLazyQuery(VALIDATE_ADDRESS);
+  const [validateAddress, { loading, error, data }] = useLazyQuery(
+    VALIDATE_ADDRESS,
+    {
+      fetchPolicy: "network-only",
+    }
+  );
 
   console.log(data);
 

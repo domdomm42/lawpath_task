@@ -2,17 +2,33 @@ import { Locality, LocalitiesResponse } from "./types";
 import { AUSTRALIAN_STATES } from "@/lib/constants";
 
 // Normalize data into array structure
-export const normalizeLocalities = (data: LocalitiesResponse): Locality[] => {
-  if (!data.localities?.locality) {
+export const normalizeLocalities = (
+  response: LocalitiesResponse
+): Locality[] => {
+  // Handle empty response
+  if (!response) {
     return [];
   }
 
-  // if locality is not in array form, convert it to an array format.
-  return Array.isArray(data.localities.locality)
-    ? data.localities.locality
-    : [data.localities.locality];
-};
+  let localities: Locality | Locality[] | undefined;
 
+  // Case 1: Standard response { localities: { locality: ... } }
+  if ("localities" in response && response.localities?.locality) {
+    localities = response.localities.locality;
+  }
+  // Case 2: Wrapped response { data: { localities: { locality: ... } } }
+  else if ("data" in response && response.data?.localities?.locality) {
+    localities = response.data.localities.locality;
+  }
+
+  // Handle missing data
+  if (!localities) {
+    return [];
+  }
+
+  // Handle both array and single object cases
+  return Array.isArray(localities) ? localities : [localities];
+};
 // Given a suburbname and list of localities, check if the suburb name is full, i.e. not partial
 export const isSuburbValid = (
   suburbName: string,

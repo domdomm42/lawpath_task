@@ -15,8 +15,24 @@ export interface Locality {
   state: string;
 }
 
-export interface LocalitiesResponse {
-  localities?: {
-    locality: Locality[] | Locality;
+// Most of the time, the post API returns a single locality object
+export interface SingleLocalityResponse {
+  localities: {
+    locality: Locality | Locality[];
   };
 }
+
+// Rarely, the post API returns a nested data response
+export interface NestedLocalityResponse {
+  data?: {
+    localities?: {
+      locality: Locality | Locality[];
+    };
+  };
+}
+
+// Combined type that allows either format
+export type LocalitiesResponse =
+  | SingleLocalityResponse
+  | NestedLocalityResponse
+  | undefined; // For the empty case
