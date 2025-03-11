@@ -14,6 +14,7 @@ const handler = startServerAndCreateNextHandler(server, {
   context: async () => {
     const apiUrl = process.env.AUSTRALIA_POST_API_URL;
     const apiToken = process.env.AUSTRALIA_POST_API_TOKEN;
+    const { cache } = server;
 
     if (!apiUrl || !apiToken) {
       throw new Error("API credentials not configured");
@@ -21,7 +22,7 @@ const handler = startServerAndCreateNextHandler(server, {
 
     return {
       dataSources: {
-        localities: new LocalitiesAPI(apiUrl, apiToken),
+        localities: new LocalitiesAPI(apiUrl, apiToken, { cache }),
       },
     };
   },

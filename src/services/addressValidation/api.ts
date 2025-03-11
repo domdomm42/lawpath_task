@@ -1,9 +1,13 @@
 import { AugmentedRequest, RESTDataSource } from "@apollo/datasource-rest";
 import { LocalitiesResponse } from "./types";
-
+import { KeyValueCache } from "@apollo/utils.keyvaluecache";
 export class LocalitiesAPI extends RESTDataSource {
-  constructor(baseURL: string, private authToken: string) {
-    super();
+  constructor(
+    baseURL: string,
+    private authToken: string,
+    options?: { cache: KeyValueCache }
+  ) {
+    super(options);
     this.baseURL = baseURL;
   }
 

@@ -52,6 +52,9 @@ function AddressForm() {
 
   // Monitor Apollo states
   useEffect(() => {
+    // Skip effect if data is undefined during initial render
+    // if (data === undefined && !loading && !error) return;
+
     // Handle loading state
     if (loading) {
       setStatus({
