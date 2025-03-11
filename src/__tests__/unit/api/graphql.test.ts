@@ -137,7 +137,7 @@ describe("GraphQL Address Validation unit test", () => {
     // ERROR CASES
     //-------------------------------------------------------------------------
     describe("Error cases", () => {
-      it("should handle API errors gracefully", async () => {
+      it("should return GraphQL errors for API errors", async () => {
         // Replace fetch mock with MockLocalitiesAPI
         mockLocalitiesAPI.getLocalities.mockRejectedValueOnce(
           new Error("Network error")
@@ -162,16 +162,25 @@ describe("GraphQL Address Validation unit test", () => {
           }
         );
 
-        // Assert results
+        // Assert results - now expecting GraphQL errors
         expect(result.body.kind).toBe("single");
         if (result.body.kind === "single") {
-          const data = result.body.singleResult.data as {
-            validateAddress: { isValid: boolean; message: string };
-          };
-          expect(data.validateAddress).toEqual({
-            isValid: false,
-            message: "Validation error: Network error",
-          });
+          // Check that errors exist in the response
+          expect(result.body.singleResult.errors).toBeDefined();
+
+          // Verify error properties
+          const error = result.body.singleResult.errors?.[0];
+          expect(error).toBeDefined();
+          expect(error?.message).toContain(
+            "Address validation service unavailable"
+          );
+          expect(error?.extensions?.code).toBe("SERVICE_UNAVAILABLE");
+          expect(error?.extensions?.originalError).toContain(
+            "Address validation service unavailable"
+          );
+
+          // Since there's an error, data should be null
+          expect(result.body.singleResult.data).toBeNull();
         }
       });
 

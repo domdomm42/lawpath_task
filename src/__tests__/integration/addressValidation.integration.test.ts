@@ -103,9 +103,8 @@ describe("Address Validation Integration Tests", () => {
     expect(result.data.validateAddress.message).toContain("does not exist");
   });
 
-  itif("should handle API errors gracefully", async () => {
-    // This test depends on the specific error handling in your resolvers
-    // It might need adjustment based on your actual implementation
+  it("should return GraphQL errors for API errors", async () => {
+    // Make a request that would trigger an API error
     const response = await fetch(serverURL, {
       method: "POST",
       headers: {
@@ -123,10 +122,22 @@ describe("Address Validation Integration Tests", () => {
 
     const result = await response.json();
 
-    // We expect the resolver to handle the error gracefully
+    // With GraphQLError handling, we expect:
+    // 1. HTTP status is still 200 (GraphQL uses 200 even for errors)
     expect(response.status).toBe(200);
-    expect(result.data).toBeDefined();
-    expect(result.data.validateAddress).toHaveProperty("isValid", false);
-    expect(result.data.validateAddress.message).toBeTruthy(); // Some error message
+
+    // 2. The response should have errors array
+    expect(result.errors).toBeDefined();
+    expect(Array.isArray(result.errors)).toBe(true);
+    expect(result.errors.length).toBeGreaterThan(0);
+
+    // 3. The error should have the right structure
+    const error = result.errors[0];
+    expect(error.message).toContain("Address validation service unavailable");
+    expect(error.extensions).toBeDefined();
+    expect(error.extensions.code).toBe("SERVICE_UNAVAILABLE");
+
+    // 4. Data should be null when there are errors
+    expect(result.data).toBeNull();
   });
 });

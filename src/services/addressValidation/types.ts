@@ -31,8 +31,9 @@ export interface NestedLocalityResponse {
   };
 }
 
-// Combined type that allows either format
+// There are essentially 3 cases, SingleLocalityResponse, NestedLocalityResponse, and null/undefined/empty string
 export type LocalitiesResponse =
   | SingleLocalityResponse
   | NestedLocalityResponse
-  | undefined; // For the empty case
+  | null
+  | undefined;

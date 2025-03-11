@@ -5,7 +5,6 @@ import { AUSTRALIAN_STATES } from "@/lib/constants";
 export const normalizeLocalities = (
   response: LocalitiesResponse
 ): Locality[] => {
-  // Handle empty response
   if (!response) {
     return [];
   }
@@ -29,6 +28,7 @@ export const normalizeLocalities = (
   // Handle both array and single object cases
   return Array.isArray(localities) ? localities : [localities];
 };
+
 // Given a suburbname and list of localities, check if the suburb name is full, i.e. not partial
 export const isSuburbValid = (
   suburbName: string,

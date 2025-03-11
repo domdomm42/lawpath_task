@@ -1,6 +1,7 @@
 import { AddressInput, LocalitiesResponse, ValidationResult } from "./types";
 import { LocalitiesAPI } from "./api";
 import { normalizeLocalities, isSuburbValid, getStateLabel } from "./utils";
+import { GraphQLError } from "graphql";
 
 // Keep the functional approach but accept the DataSource instead of baseUrl/authToken
 export const createAddressValidator = (localitiesAPI: LocalitiesAPI) => {
@@ -13,7 +14,6 @@ export const createAddressValidator = (localitiesAPI: LocalitiesAPI) => {
     try {
       // Get locality data using DataSource
 
-      console.log(address);
       const data: LocalitiesResponse = await localitiesAPI.getLocalities(
         address.suburb,
         address.state
@@ -55,13 +55,13 @@ export const createAddressValidator = (localitiesAPI: LocalitiesAPI) => {
       };
     } catch (error) {
       console.error("Error validating address:", error);
-      return {
-        isValid: false,
-        message:
-          error instanceof Error
-            ? `Validation error: ${error.message}`
-            : "Error validating address. Please try again.",
-      };
+
+      throw new GraphQLError("Address validation service unavailable", {
+        extensions: {
+          code: "SERVICE_UNAVAILABLE",
+          originalError: error instanceof Error ? error.message : String(error),
+        },
+      });
     }
   };
 };

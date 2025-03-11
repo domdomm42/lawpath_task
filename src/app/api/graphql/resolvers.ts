@@ -1,6 +1,7 @@
 import { AddressInput } from "@/services/addressValidation/types";
 import { LocalitiesAPI } from "@/services/addressValidation/api";
 import { createAddressValidator } from "@/services/addressValidation/index";
+import { GraphQLError } from "graphql";
 
 type Context = {
   dataSources: {
@@ -20,13 +21,14 @@ export const resolvers = {
         return await validateAddress(args);
       } catch (error) {
         console.error("Error in validateAddress resolver:", error);
-        return {
-          isValid: false,
-          message:
-            error instanceof Error
-              ? `Resolver error: ${error.message}`
-              : "Error validating address. Please try again.",
-        };
+
+        throw new GraphQLError("Address validation service unavailable", {
+          extensions: {
+            code: "SERVICE_UNAVAILABLE",
+            originalError:
+              error instanceof Error ? error.message : String(error),
+          },
+        });
       }
     },
   },

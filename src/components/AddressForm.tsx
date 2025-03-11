@@ -45,19 +45,14 @@ function AddressForm() {
   });
 
   // Apollo query setup
-  const [validateAddress, { loading, error, data }] = useLazyQuery(
-    VALIDATE_ADDRESS,
-    {
-      fetchPolicy: "network-only",
-    }
-  );
-
-  console.log(data);
+  const [validateAddress, { loading, error, data }] =
+    useLazyQuery(VALIDATE_ADDRESS);
 
   // Monitor Apollo states
   useEffect(() => {
     // Handle loading state
     if (loading) {
+      console.log("loading");
       setStatus({
         isSubmitting: true,
         isSuccess: false,

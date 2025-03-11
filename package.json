@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
+    "test:unit": "jest --testMatch=\"**/src/__tests__/unit/**/*.test.ts?(x)\" --runInBand",
+    "test:e2e": "jest --testMatch=\"**/src/__tests__/e2e/**/*.test.ts?(x)\" --runInBand --forceExit",
     "test:integration": "RUN_INTEGRATION_TESTS=true jest --testMatch=\"**/*.integration.test.ts\""
   },
   "dependencies": {
