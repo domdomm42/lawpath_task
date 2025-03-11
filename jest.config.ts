@@ -1,29 +1,26 @@
 import type { Config } from "jest";
+import nextJest from "next/jest.js";
+
+const createJestConfig = nextJest({
+  dir: "./",
+});
 
 const config: Config = {
-  preset: "ts-jest",
-  testEnvironment: "node",
-  transform: {
-    "^.+\\.tsx?$": "ts-jest",
-  },
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
-
-  testPathIgnorePatterns: ["/node_modules/", "/__mocks__/"],
-
-  testMatch: [
-    "**/__tests__/**/*.test.[jt]s?(x)",
-    "**/__tests__/**/*.spec.[jt]s?(x)",
-    "**/?(*.)+(spec|test).[jt]s?(x)",
-  ],
-
-  clearMocks: true,
-  collectCoverage: true,
-  coverageDirectory: "coverage",
   coverageProvider: "v8",
-
+  testEnvironment: "node",
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+  testMatch: [
+    "<rootDir>/src/__tests__/unit/**/?(*.)+(spec|test).[jt]s?(x)",
+    "<rootDir>/src/__tests__/integration/**/?(*.)+(spec|test).[jt]s?(x)",
+    "<rootDir>/src/__tests__/e2e/**/?(*.)+(spec|test).[jt]s?(x)",
+  ],
+  testPathIgnorePatterns: ["/node_modules/", "/__mocks__/"],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
+  clearMocks: true,
+  collectCoverage: true,
+  coverageDirectory: "coverage",
 };
 
-export default config;
+export default createJestConfig(config);
