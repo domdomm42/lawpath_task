@@ -13,61 +13,13 @@ import {
 import userEvent from "@testing-library/user-event";
 import { MockedProvider } from "@apollo/client/testing";
 import AddressForm from "@/components/AddressForm";
-import { VALIDATE_ADDRESS } from "@/lib/graphql/queries";
+
 import "@testing-library/jest-dom";
-
-// Mock data for successful validation
-const validAddressMock = {
-  request: {
-    query: VALIDATE_ADDRESS,
-    variables: {
-      postcode: "2000",
-      suburb: "Sydney",
-      state: "NSW",
-    },
-  },
-  result: {
-    data: {
-      validateAddress: {
-        isValid: true,
-        message: "Address is valid",
-      },
-    },
-  },
-};
-
-// Mock data for failed validation
-const invalidAddressMock = {
-  request: {
-    query: VALIDATE_ADDRESS,
-    variables: {
-      postcode: "9999",
-      suburb: "Invalid",
-      state: "NSW",
-    },
-  },
-  result: {
-    data: {
-      validateAddress: {
-        isValid: false,
-        message: "Address could not be validated",
-      },
-    },
-  },
-};
-
-// Mock error response
-const errorMock = {
-  request: {
-    query: VALIDATE_ADDRESS,
-    variables: {
-      postcode: "5000",
-      suburb: "Error",
-      state: "SA",
-    },
-  },
-  error: new Error("An error occurred"),
-};
+import {
+  validAddressMock,
+  invalidAddressMock,
+  errorMock,
+} from "@/__tests__/__mocks__/data/addressValidation";
 
 describe("AddressForm", () => {
   test("renders all form fields correctly", async () => {

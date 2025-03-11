@@ -52,7 +52,6 @@ function AddressForm() {
   useEffect(() => {
     // Handle loading state
     if (loading) {
-      console.log("loading");
       setStatus({
         isSubmitting: true,
         isSuccess: false,
@@ -99,6 +98,7 @@ function AddressForm() {
 
   // Submit handler - only runs if zod validation passes
   const onSubmit = (formData: AddressFormData) => {
+    console.log("Form submitted with data:", formData);
     validateAddress({
       variables: {
         postcode: formData.postcode,

@@ -1,3 +1,5 @@
+import { VALIDATE_ADDRESS } from "@/lib/graphql/queries";
+
 export const mockValidLocality = {
   localities: {
     locality: [
@@ -57,4 +59,57 @@ export const mockEmptyLocality = {
   localities: {
     locality: [],
   },
+};
+
+// Mock data for successful validation
+export const validAddressMock = {
+  request: {
+    query: VALIDATE_ADDRESS,
+    variables: {
+      postcode: "2000",
+      suburb: "Sydney",
+      state: "NSW",
+    },
+  },
+  result: {
+    data: {
+      validateAddress: {
+        isValid: true,
+        message: "Address is valid",
+      },
+    },
+  },
+};
+
+// Mock data for failed validation
+export const invalidAddressMock = {
+  request: {
+    query: VALIDATE_ADDRESS,
+    variables: {
+      postcode: "9999",
+      suburb: "Invalid",
+      state: "NSW",
+    },
+  },
+  result: {
+    data: {
+      validateAddress: {
+        isValid: false,
+        message: "Address could not be validated",
+      },
+    },
+  },
+};
+
+// Mock error response
+export const errorMock = {
+  request: {
+    query: VALIDATE_ADDRESS,
+    variables: {
+      postcode: "5000",
+      suburb: "Error",
+      state: "SA",
+    },
+  },
+  error: new Error("An error occurred"),
 };

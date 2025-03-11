@@ -20,7 +20,7 @@ export const resolvers = {
         const validateAddress = createAddressValidator(dataSources.localities);
         return await validateAddress(args);
       } catch (error) {
-        console.error("Error in validateAddress resolver:", error);
+        console.error("Error in validateAddress resolver:"  , error);
 
         throw new GraphQLError("Address validation service unavailable", {
           extensions: {
