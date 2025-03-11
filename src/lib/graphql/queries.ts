@@ -1,4 +1,3 @@
-// src/lib/graphql/queries.ts
 import { gql } from "@apollo/client";
 
 export const VALIDATE_ADDRESS = gql`

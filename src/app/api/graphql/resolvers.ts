@@ -1,6 +1,6 @@
-import { AddressInput } from "../../../services/addressValidation/types";
-import { LocalitiesAPI } from "../../../services/addressValidation/api";
-import { createAddressValidator } from "../../../services/addressValidation/index";
+import { AddressInput } from "@/services/addressValidation/types";
+import { LocalitiesAPI } from "@/services/addressValidation/api";
+import { createAddressValidator } from "@/services/addressValidation/index";
 
 type Context = {
   dataSources: {

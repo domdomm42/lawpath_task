@@ -1,16 +1,16 @@
 import { ApolloServer } from "@apollo/server";
-import { typeDefs } from "../../../app/api/graphql/schema";
-import { resolvers } from "../../../app/api/graphql/resolvers";
+import { typeDefs } from "@/app/api/graphql/schema";
+import { resolvers } from "@/app/api/graphql/resolvers";
 import {
   mockValidLocality,
   mockPartialLocality,
   mockEmptyLocality,
-} from "../../__mocks__/data/addressValidation";
+} from "@/__tests__/__mocks__/data/addressValidation";
 import {
   VALIDATE_ADDRESS_QUERY,
   INVALID_ADDRESS_QUERY,
-} from "../../__mocks__/queries/addressValidation";
-import { MockLocalitiesAPI } from "../../__mocks__/api";
+} from "@/__tests__/__mocks__/queries/addressValidation";
+import { MockLocalitiesAPI } from "@/__tests__/__mocks__/api";
 
 type TestContext = {
   dataSources: {

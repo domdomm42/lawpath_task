@@ -1,15 +1,13 @@
-// src/__tests__/integration/addressValidation.integration.test.ts
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
-import { typeDefs } from "../../app/api/graphql/schema";
-import { resolvers } from "../../app/api/graphql/resolvers";
-import { LocalitiesAPI } from "../../services/addressValidation/api";
-import { VALIDATE_ADDRESS_QUERY } from "../__mocks__/queries/addressValidation";
+import { typeDefs } from "@/app/api/graphql/schema";
+import { resolvers } from "@/app/api/graphql/resolvers";
+import { LocalitiesAPI } from "@/services/addressValidation/api";
+import { VALIDATE_ADDRESS_QUERY } from "@/__tests__/__mocks__/queries/addressValidation";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-// Define the Context type to match your resolver's expected context
 interface Context {
   dataSources: {
     localities: LocalitiesAPI;

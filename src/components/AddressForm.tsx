@@ -4,8 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useLazyQuery } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormInput from "../components/FormInput";
-import StatusMessage from "./StatusMessage";
+import FormInput from "@/components/FormInput";
+import StatusMessage from "@/components/StatusMessage";
 import { AUSTRALIAN_STATES } from "@/lib/constants";
 import {
   addressSchema,
@@ -52,9 +52,6 @@ function AddressForm() {
 
   // Monitor Apollo states
   useEffect(() => {
-    // Skip effect if data is undefined during initial render
-    // if (data === undefined && !loading && !error) return;
-
     // Handle loading state
     if (loading) {
       setStatus({
