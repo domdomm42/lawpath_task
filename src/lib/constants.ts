@@ -1,3 +1,7 @@
+/**
+ * Australian states and territories with their codes and full names
+ * Used for form dropdown options and state code to name conversion
+ */
 export const AUSTRALIAN_STATES = [
   { value: "NSW", label: "New South Wales (NSW)" },
   { value: "VIC", label: "Victoria (VIC)" },

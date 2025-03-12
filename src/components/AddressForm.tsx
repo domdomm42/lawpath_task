@@ -63,7 +63,6 @@ function AddressForm() {
 
     // Handle error state
     if (error) {
-      console.error("GraphQL error:", error);
       setStatus({
         isSubmitting: false,
         isSuccess: false,
@@ -98,7 +97,6 @@ function AddressForm() {
 
   // Submit handler - only runs if zod validation passes
   const onSubmit = (formData: AddressFormData) => {
-    console.log("Form submitted with data:", formData);
     validateAddress({
       variables: {
         postcode: formData.postcode,
@@ -119,7 +117,6 @@ function AddressForm() {
           error={errors.postcode?.message}
           {...register("postcode", {
             onChange: (e) => {
-              // Keep only numeric characters for postcode
               const numericValue = e.target.value.replace(/[^0-9]/g, "");
               e.target.value = numericValue;
               handleInputChange();
@@ -134,7 +131,7 @@ function AddressForm() {
           placeholder="e.g. Sydney"
           error={errors.suburb?.message}
           {...register("suburb", {
-            onChange: () => handleInputChange(), // Clear message when the user types
+            onChange: () => handleInputChange(),
           })}
         />
 
@@ -146,7 +143,7 @@ function AddressForm() {
           options={AUSTRALIAN_STATES}
           error={errors.state?.message}
           {...register("state", {
-            onChange: () => handleInputChange(), // Clear message when the user types
+            onChange: () => handleInputChange(),
           })}
         />
 

@@ -1,7 +1,13 @@
 import { Locality, LocalitiesResponse } from "./types";
 import { AUSTRALIAN_STATES } from "@/lib/constants";
 
-// Normalize data into array structure
+/**
+ * Normalizes various response formats from the Australia Post API into a consistent array of localities
+ * Handles both single locality and multiple localities formats
+ *
+ * @param {LocalitiesResponse} response - Raw response from the Australia Post API
+ * @returns {Locality[]} Normalized array of locality objects
+ */
 export const normalizeLocalities = (
   response: LocalitiesResponse
 ): Locality[] => {
@@ -29,7 +35,14 @@ export const normalizeLocalities = (
   return Array.isArray(localities) ? localities : [localities];
 };
 
-// Given a suburbname and list of localities, check if the suburb name is full, i.e. not partial
+/**
+ * Validates if a suburb name is fully matched (not partially) in the list of localities
+ * Performs case-insensitive comparison
+ *
+ * @param {string} suburbName - User-entered suburb name to validate
+ * @param {Locality[]} normalizedLocalities - List of localities to check against
+ * @returns {boolean} True if suburb exists exactly as entered, false otherwise
+ */
 export const isSuburbValid = (
   suburbName: string,
   normalizedLocalities: Locality[]
@@ -39,6 +52,12 @@ export const isSuburbValid = (
   );
 };
 
+/**
+ * Converts a state code to its full label name
+ *
+ * @param {string} stateCode - Two or three letter state code (e.g., "NSW", "VIC")
+ * @returns {string} Full state name or the original code if not found
+ */
 export const getStateLabel = (stateCode: string): string => {
   return (
     AUSTRALIAN_STATES.find((s) => s.value === stateCode)?.label || stateCode

@@ -162,7 +162,6 @@ describe("GraphQL Address Validation unit test", () => {
           }
         );
 
-        // Assert results - now expecting GraphQL errors
         expect(result.body.kind).toBe("single");
         if (result.body.kind === "single") {
           // Check that errors exist in the response

@@ -1,5 +1,9 @@
 import { gql } from "graphql-tag";
 
+/**
+ * GraphQL schema definition for the address validation API
+ * Defines types and queries for address validation functionality
+ */
 export const typeDefs = gql`
   type ValidationResult {
     isValid: Boolean!
