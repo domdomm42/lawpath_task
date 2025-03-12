@@ -53,3 +53,15 @@ const handler = startServerAndCreateNextHandler(server, {
 export async function POST(req: NextRequest) {
   return handler(req);
 }
+
+/**
+ * GET handler for GraphQL endpoint
+ * Enables the Apollo Sandbox/GraphQL Playground in the browser
+ * This is only needed for development convenience and doesn't affect API functionality
+ *
+ * @param {NextRequest} req - Incoming request object
+ * @returns {Promise<Response>} GraphQL playground interface
+ */
+export async function GET(req: NextRequest) {
+  return handler(req);
+}

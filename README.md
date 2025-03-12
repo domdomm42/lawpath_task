@@ -4,20 +4,20 @@ A Next.js application that validates Australian postal addresses by checking if 
 
 ## Overview
 
-This project provides a user-friendly form interface that validates Australian postal addresses by checking three key relationships:
+This project provides a form interface that validates Australian postal addresses by checking three key relationships:
 
 1. If the suburb exists in the specified state
 2. If the postcode matches the specified suburb
 3. If all three components together form a valid Australian address
 
-The application uses Next.js 14 with the App Router, GraphQL, and integrates with the Australia Post API through a GraphQL proxy.
+The application uses Next.js 14 with the App Router, GraphQL, and integrates with the given Australia Post API through a GraphQL proxy.
 
 ## Features
 
 - ✅ Real-time address validation using Australia Post API
 - 🌐 GraphQL proxy for the REST API
 - 🔄 Form validation with React Hook Form and Zod
-- 💅 Responsive UI with dark mode support
+- 💅 Responsive UI
 - 🚀 Server-side GraphQL implementation using Apollo Server
 - 📦 Client-side data fetching with Apollo Client
 - 🧪 Type safety with TypeScript
@@ -27,24 +27,15 @@ The application uses Next.js 14 with the App Router, GraphQL, and integrates wit
 ### Prerequisites
 
 - Node.js 18.x or higher
-- npm or yarn
-- Australia Post API credentials (see below)
-
-### Australia Post API Credentials
-
-You need to obtain credentials for the Australia Post API:
-
-1. Sign up for the Australia Post Developer account at [https://developers.auspost.com.au/](https://developers.auspost.com.au/)
-2. Subscribe to the PAF (Postal Address File) API
-3. Generate an API key to use in this application
+- npm
 
 ### Environment Setup
 
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/yourusername/australia-post-address-validator.git
-   cd australia-post-address-validator
+   git clone https://github.com/domdomm42/lawpath_task.git
+   cd lawpath_task
    ```
 
 2. Install dependencies:
@@ -56,8 +47,8 @@ You need to obtain credentials for the Australia Post API:
 3. Create a `.env` file in the root directory with your Australia Post API credentials:
 
    ```
-   AUSTRALIA_POST_API_URL=https://digitalapi.auspost.com.au/postcode/search.json
-   AUSTRALIA_POST_API_TOKEN=your-api-token-here
+   AUSTRALIA_POST_API_URL=<redacted but for the sake of assessment, it is https://gavg8gilmf.execute-api.ap-southeast-2.amazonaws.com/staging/postcode/search.json>
+   AUSTRALIA_POST_API_TOKEN=<redacted but for the sake of assessment, it is 7710a8c5-ccd1-160f-70cf03e8-b2bbaf01>
    ```
 
 4. Start the development server:
@@ -68,11 +59,13 @@ You need to obtain credentials for the Australia Post API:
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
+I have setup a graphql playground at [http://localhost:3000/api/graphql](http://localhost:3000/api/graphql) for you to test the api.
+
 ## Architecture
 
 ### Overview
 
-This application follows a modern architecture leveraging Next.js App Router for page routing, Apollo Server for the GraphQL API, and Apollo Client for data fetching.
+This app uses Next.js App Router for page routing, Apollo Server for the GraphQL API, and Apollo Client for data fetching.
 
 ```
 ├── src/
@@ -117,8 +110,22 @@ This multi-level approach minimizes external API calls while ensuring data fresh
 Run the test suite:
 
 ```bash
+# For all tests
 npm test
+
+# For unit tests
+npm run test:unit
+
+# For integration tests
+npm run test:integration
+
+# For e2e tests
+npm run test:e2e
 ```
+
+DO note that given that the aus post api route sometimes given an error, integration test might fail once in a while(as we might get an error instead of our expected result). Please run the tests again if that happens.
+
+Unit test should always pass though as we mock the api response.
 
 The project includes tests for:
 
@@ -159,4 +166,4 @@ The application can validate various Australian address scenarios:
    - State: TAS
    - Result: ❌ "The suburb Ferntree Gully does not exist in the state Tasmania (TAS)."
 
-For questions or issues, please open an issue on this repository.
+For questions or issues, please reach out to me at limoudom2001@gmail.com
