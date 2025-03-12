@@ -1,37 +1,162 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Australia Post Address Validator
 
-## Getting Started
+A Next.js application that validates Australian postal addresses by checking if postcode, suburb, and state combinations are valid through the Australia Post API.
 
-First, run the development server:
+## Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+This project provides a user-friendly form interface that validates Australian postal addresses by checking three key relationships:
+
+1. If the suburb exists in the specified state
+2. If the postcode matches the specified suburb
+3. If all three components together form a valid Australian address
+
+The application uses Next.js 14 with the App Router, GraphQL, and integrates with the Australia Post API through a GraphQL proxy.
+
+## Features
+
+- ✅ Real-time address validation using Australia Post API
+- 🌐 GraphQL proxy for the REST API
+- 🔄 Form validation with React Hook Form and Zod
+- 💅 Responsive UI with dark mode support
+- 🚀 Server-side GraphQL implementation using Apollo Server
+- 📦 Client-side data fetching with Apollo Client
+- 🧪 Type safety with TypeScript
+
+## Setup Instructions
+
+### Prerequisites
+
+- Node.js 18.x or higher
+- npm or yarn
+- Australia Post API credentials (see below)
+
+### Australia Post API Credentials
+
+You need to obtain credentials for the Australia Post API:
+
+1. Sign up for the Australia Post Developer account at [https://developers.auspost.com.au/](https://developers.auspost.com.au/)
+2. Subscribe to the PAF (Postal Address File) API
+3. Generate an API key to use in this application
+
+### Environment Setup
+
+1. Clone this repository:
+
+   ```bash
+   git clone https://github.com/yourusername/australia-post-address-validator.git
+   cd australia-post-address-validator
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env` file in the root directory with your Australia Post API credentials:
+
+   ```
+   AUSTRALIA_POST_API_URL=https://digitalapi.auspost.com.au/postcode/search.json
+   AUSTRALIA_POST_API_TOKEN=your-api-token-here
+   ```
+
+4. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+
+## Architecture
+
+### Overview
+
+This application follows a modern architecture leveraging Next.js App Router for page routing, Apollo Server for the GraphQL API, and Apollo Client for data fetching.
+
+```
+├── src/
+│   ├── app/             # Next.js App Router structure
+│   │   ├── api/         # API routes
+│   │   │   └── graphql/ # GraphQL API endpoint
+│   │   └── page.tsx     # Main page component
+│   ├── components/      # React components
+│   ├── lib/             # Utility functions, constants, and schemas
+│   │   ├── graphql/     # GraphQL client setup and queries
+│   │   └── validations/ # Form validation schemas
+│   └── services/        # Service layer for external API integration
+│       └── addressValidation/ # Australia Post API integration
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Key Components
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Form Layer**: Uses React Hook Form with Zod validation to capture and validate user input.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **GraphQL Client**: Apollo Client configured with in-memory cache and same-origin credentials handling.
 
-## Learn More
+3. **GraphQL Server**: Next.js API route that implements a GraphQL server using Apollo Server.
 
-To learn more about Next.js, take a look at the following resources:
+4. **API Integration**: Dedicated service layer that connects to the Australia Post API using Apollo's RESTDataSource.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. **Validation Logic**: Core business logic that determines if an address is valid based on Australia Post data.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Caching Strategy
 
-## Deploy on Vercel
+The application implements a multi-level caching strategy:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Apollo Server Cache**: The GraphQL server uses Apollo's in-memory cache to store Australia Post API responses, reducing redundant external API calls for the same queries.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# lawpath_task
+2. **Apollo Client Cache**: Client-side caching through Apollo's InMemoryCache to store query results, though configured with a network-only fetch policy to ensure fresh data for address validation.
+
+3. **RESTDataSource Caching**: The `LocalitiesAPI` class extends Apollo's `RESTDataSource`, which automatically provides HTTP caching for the external Australia Post API.
+
+This multi-level approach minimizes external API calls while ensuring data freshness for critical validation operations.
+
+## Testing
+
+Run the test suite:
+
+```bash
+npm test
+```
+
+The project includes tests for:
+
+- Form validation logic
+- API integration
+- GraphQL resolvers
+- React components
+
+## Technologies Used
+
+- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
+- **GraphQL**: Apollo Server, Apollo Client
+- **API Integration**: Apollo RESTDataSource
+- **Form Handling**: React Hook Form, Zod
+- **Testing**: Jest, React Testing Library
+
+## Example Validations
+
+The application can validate various Australian address scenarios:
+
+1. **Valid Address**:
+
+   - Postcode: 2000
+   - Suburb: Sydney
+   - State: NSW
+   - Result: ✅ "The postcode, suburb, and state input are valid."
+
+2. **Invalid Postcode**:
+
+   - Postcode: 3000
+   - Suburb: Sydney
+   - State: NSW
+   - Result: ❌ "The postcode 3000 does not match the suburb Sydney."
+
+3. **Invalid Suburb/State Combination**:
+   - Postcode: 3000
+   - Suburb: Ferntree Gully
+   - State: TAS
+   - Result: ❌ "The suburb Ferntree Gully does not exist in the state Tasmania (TAS)."
+
+For questions or issues, please open an issue on this repository.
