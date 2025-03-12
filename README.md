@@ -142,7 +142,7 @@ npm run test:integration
 npm run test:e2e
 ```
 
-DO note that given that the aus post api route sometimes given an error, integration test might fail once in a while(as we might get an error instead of our expected result). Please run the tests again if that happens.
+DO note that given that the aus post api route sometimes gives an error, integration test might fail once in a while(as we might get an error instead of our expected result). Please run the tests again if that happens.
 
 Unit test should always pass though as we mock the api response.
 
