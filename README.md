@@ -1,6 +1,6 @@
 # Australia Post Address Validator
 
-A Next.js application that validates Australian postal addresses by checking if postcode, suburb, and state combinations are valid through the Australia Post API.
+A Next.js application that validates Australian postal addresses by checking if postcode, suburb, and state combinations are valid through the given Australia Post API.
 
 ## Overview
 
@@ -14,7 +14,6 @@ The application uses Next.js 14 with the App Router, GraphQL, and integrates wit
 
 ## Features
 
-- ✅ Real-time address validation using Australia Post API
 - 🌐 GraphQL proxy for the REST API
 - 🔄 Form validation with React Hook Form and Zod
 - 💅 Responsive UI
@@ -44,7 +43,7 @@ The application uses Next.js 14 with the App Router, GraphQL, and integrates wit
    npm install
    ```
 
-3. Create a `.env` file in the root directory with your Australia Post API credentials:
+3. Create a `.env` file in the root directory with the assessment credentials:
 
    ```
    AUSTRALIA_POST_API_URL=<redacted but for the sake of assessment, it is https://gavg8gilmf.execute-api.ap-southeast-2.amazonaws.com/staging/postcode/search.json>
@@ -99,7 +98,7 @@ The application implements a multi-level caching strategy:
 
 1. **Apollo Server Cache**: The GraphQL server uses Apollo's in-memory cache to store Australia Post API responses, reducing redundant external API calls for the same queries.
 
-2. **Apollo Client Cache**: Client-side caching through Apollo's InMemoryCache to store query results, though configured with a network-only fetch policy to ensure fresh data for address validation.
+2. **Apollo Client Cache**: Client-side caching through Apollo's InMemoryCache to store query results, useLazyQuery defaults to cache-first.
 
 3. **RESTDataSource Caching**: The `LocalitiesAPI` class extends Apollo's `RESTDataSource`, which automatically provides HTTP caching for the external Australia Post API.
 
@@ -142,7 +141,7 @@ The project includes tests for:
 - **Form Handling**: React Hook Form, Zod
 - **Testing**: Jest, React Testing Library
 
-## Example Validations
+## Key Example Validations
 
 The application can validate various Australian address scenarios:
 
