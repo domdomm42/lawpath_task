@@ -10,7 +10,7 @@ This project provides a form interface that validates Australian postal addresse
 2. If the postcode matches the specified suburb
 3. If all three components together form a valid Australian address
 
-The application uses Next.js 14 with the App Router, GraphQL, and integrates with the given Australia Post API through a GraphQL proxy.
+The application uses Next.js 15.2.1 with the App Router, GraphQL, and integrates with the given Australia Post API through a GraphQL proxy.
 
 ## Features
 
