@@ -102,7 +102,27 @@ The application implements a multi-level caching strategy:
 
 3. **RESTDataSource Caching**: The `LocalitiesAPI` class extends Apollo's `RESTDataSource`, which automatically provides HTTP caching for the external Australia Post API.
 
-This multi-level approach minimizes external API calls while ensuring data freshness for critical validation operations.
+## My Approach
+
+### Validation Strategy
+
+I implemented a step-by-step validation approach for Australian addresses:
+
+1. **State and Suburb Validation (First Pass)**:
+
+   - First, I validate if the provided suburb exists within the specified state
+   - This initial check prevents unnecessary postcode queries for invalid suburb/state combinations
+   - The application queries the Australia Post API to retrieve all localities that match the suburb name
+
+2. **Postcode Validation (Second Pass)**:
+
+   - Once the suburb is confirmed to exist in the state, I validate if the provided postcode matches the suburb through the list of valid postcodes for that suburb
+
+3. **Complete Address Validation**:
+   - When both validations pass, the system confirms the address components form a valid Australian address
+   - The validation logic handles edge cases like suburbs that exist in multiple states or suburbs with multiple valid postcodes
+
+There are cases where the output format of the api is not what I expected, Those cases are handled in the code.
 
 ## Testing
 
